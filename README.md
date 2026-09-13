@@ -9,6 +9,10 @@ AI-powered content studio to create **social media posts**, **images**, and **em
 ![CrewAI](https://img.shields.io/badge/CrewAI-1.6-7C5CFF?style=flat)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat)
 
+> [!IMPORTANT]
+> ## 🤖 This Project Showcases the Use of CrewAI
+> **PostCraft is built to demonstrate CrewAI multi-agent orchestration** — `Post Studio` (4 agents) and `Email Studio` (1 agent) run as **CrewAI Crews** with LLM fallback, while `Image Studio` and `Prompt Enhancer` use direct LLM calls.
+
 ---
 
 ## About
