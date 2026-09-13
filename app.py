@@ -72,23 +72,26 @@ Rules:
     agent=Email_Writer_Agent
 )
 
-# Crews - Post crew (4 tasks) and Email crew (reuses filter + email writer) - ALWAYS via CrewAI (no direct LLM bypass)
+# Crews - Post: 4 tasks (with web search). Email: 1-2 tasks (NO web search) — direct write, no research needed
 post_crew = Crew(agents=[Query_Interpreter_Agent, Web_Search_Agent, News_Filter_Agent, Post_Creator_Agent], tasks=[Query_Interpreter_Task, Web_Search_Task, News_Filter_Task, Post_Creator_Task], verbose=False)
-email_crew = Crew(agents=[Query_Interpreter_Agent, Web_Search_Agent, News_Filter_Agent, Email_Writer_Agent], tasks=[Query_Interpreter_Task, Web_Search_Task, News_Filter_Task, Email_Writer_Task], verbose=False)
+email_crew = Crew(agents=[Email_Writer_Agent], tasks=[Email_Writer_Task], verbose=False)
 
 def _build_crews_with_llm(llm_obj):
-    """Recreate crews with given LLM. Groq lightweight (2 agents), HF/Gemini full. Email outputs strict JSON."""
+    """Recreate crews with given LLM. Post: 4 agents with web search. Email: 1 agent only (no web search) — direct write."""
     is_groq = llm_obj and "groq" in str(getattr(llm_obj, "model", "")).lower()
     if is_groq:
-        q = Agent(role="Query Interpreter", goal="Extract topic and intent from query.", backstory="Checkpoint.", verbose=False, llm=llm_obj)
+        # Email: single Email Writer (no Query) — fastest, no research, avoids OTPM waste
         e = Agent(role="Email Writer Agent", goal="Craft email JSON. Never hallucinate sender name. Never output thinking.", backstory="Email copywriter.", verbose=False, llm=llm_obj)
-        qt = Task(description="Read query: {query}. Extract topic.", expected_output='Topic: ...', agent=q)
         et = Task(description="Write a {email_type} email for {recipient} about {context}. Sender: {sender_name} | Job: {job_title} at {company} | Hiring manager: {hiring_manager} | JD: {job_description} | Resume: {resume_highlights} | Portfolio: {portfolio} | Tone: {tone}. CRITICAL: Output ONLY valid JSON with keys subjects (3 distinct, each must include job_title and company), preheader, body_text, body_html, cta. Do NOT write 'I understand...', 'Thought:', 'Email Components:', 'Here's the JSON', or any preamble. No markdown outside JSON, no nested JSON inside body_text.", expected_output='{"subjects":["Application for Python Developer — Flask | Infosys","Python Developer (3 yrs Flask) - Infosys","Re: Python Developer at Infosys"],"preheader":"Flask REST APIs, CrewAI — 3 yrs","body_text":"Dear Amit Kumar,\\n... Best regards,\\nRounak","body_html":"<p>Dear Amit Kumar,</p><p>...</p>","cta":"Available for interview"}', agent=e)
+        # Post: lightweight 2 agents for Groq
+        q = Agent(role="Query Interpreter", goal="Extract topic and intent from query.", backstory="Checkpoint.", verbose=False, llm=llm_obj)
         p = Agent(role="Post Creator Agent", goal="Draft posts concisely.", backstory="Storyteller.", verbose=False, llm=llm_obj)
+        qt = Task(description="Read query: {query}. Extract topic.", expected_output='Topic: ...', agent=q)
         pt = Task(description="Create posts for {query}.", expected_output='Posts labeled', agent=p)
         post = Crew(agents=[q,p], tasks=[qt,pt], verbose=False)
-        email = Crew(agents=[q,e], tasks=[qt,et], verbose=False)
+        email = Crew(agents=[e], tasks=[et], verbose=False)
         return post, email
+    # Gemini/HF: Post 4 agents, Email still 1 agent (no need for web search in email)
     q = Agent(role="Query Interpreter", goal="Understand raw user query.", backstory="Checkpoint.", verbose=False, llm=llm_obj)
     w = Agent(role="Web Search Agent", goal="Receive clean query, perform focused web search.", backstory="Collector.", tools=[web_search], verbose=False, llm=llm_obj)
     n = Agent(role="News Filter Agent", goal="Filter raw search results.", backstory="Gatekeeper.", verbose=False, llm=llm_obj)
@@ -100,7 +103,7 @@ def _build_crews_with_llm(llm_obj):
     pt = Task(description="Turn filtered_news into posts.", expected_output='Posts', agent=p)
     et = Task(description="Write a {email_type} email for {recipient} about {context}. Sender: {sender_name} | Job: {job_title} at {company} | Hiring manager: {hiring_manager} | JD: {job_description} | Resume: {resume_highlights} | Portfolio: {portfolio} | Tone: {tone}. CRITICAL: Output ONLY valid JSON with keys subjects, preheader, body_text, body_html, cta. Do NOT write 'I understand', 'Thought:', 'Email Components' or nested JSON in body.", expected_output='{"subjects":["S1","S2","S3"],"preheader":"...","body_text":"Dear ...","body_html":"<p>Dear ...</p>","cta":"..."}', agent=e)
     post = Crew(agents=[q,w,n,p], tasks=[qt,wt,nt,pt], verbose=False)
-    email = Crew(agents=[q,w,n,e], tasks=[qt,wt,nt,et], verbose=False)
+    email = Crew(agents=[e], tasks=[et], verbose=False)
     return post, email
 
 def run_crew_with_fallback(crew, inputs):
