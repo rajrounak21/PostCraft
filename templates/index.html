@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PostCraft — AI Post, Image & Email Studio</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="PostCraft logo">
+      <div>
+        <h1>Post<span>Craft</span></h1>
+        <p>No matter what you want — we craft it</p>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="#post">Post Studio</a>
+      <a href="#image">Image</a>
+      <a href="#email">Email</a>
+      <span class="chip"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M12 2l2.5 4.5L19 8l-4.5 1.5L12 12l-2.5-4.5L5 8l4.5-1.5z" />
+          <path d="M19 11l1 1 1 1-1 1-1 1-1-1-1-1 1-1z" />
+        </svg> Gemini 3.6 • HF fal-ai</span>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-card">
+      <span class="badge"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M12 2l2.5 2.5L17 7l-2.5 2.5L12 12l-2.5-2.5L7 7l2.5-2.5z" />
+          <path d="M19 11l1 2 1 1-1 1-1 2-1-2-1-1 1-1z" />
+          <path d="M5 16l1 1 1 1-1 1-1 1-1-1-1-1 1-1z" />
+        </svg> AI Post Creator</span>
+      <h2>Craft <b>posts, images & emails</b> in one click</h2>
+      <p>PostCraft merges web research + platform-tailored copy + image generation. LinkedIn, Instagram, Twitter,
+        WhatsApp, Telegram, YouTube — plus fresh image prompts and cold-email drafts. No auth needed.</p>
+      <div class="stats">
+        <div class="stat"><strong>7+</strong><span>Platforms</span></div>
+        <div class="stat"><strong>1-Click</strong><span>Image Attach</span></div>
+        <div class="stat"><strong>3</strong><span>Studios</span></div>
+      </div>
+    </div>
+    <div class="hero-side">
+      <h3>What you can do</h3>
+      <div class="chips">
+        <span class="chip"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="11" cy="11" r="7" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg> Web Search (Serper)</span>
+        <span class="chip"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M3 6h18" />
+            <path d="M8 12h8" />
+            <path d="M11 18h2" />
+            <rect x="3" y="6" width="18" height="12" rx="2" />
+          </svg> News Filter</span>
+        <span class="chip"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 20h9" />
+            <path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4 12-12z" />
+          </svg> Post Creator</span>
+        <span class="chip"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <circle cx="9" cy="9" r="2" />
+            <path d="M21 15l-5-5L5 21" />
+          </svg> Image (Krea-2-Turbo)</span>
+        <span class="chip"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M4 4h16c1 0 2 .9 2 2v12c0 1-1 2-2 2H4c-1 0-2-.9-2-2V6c0-1 .9-2 2-2z" />
+            <polyline points="22,6 12,13 2,6" />
+          </svg> Email Writer</span>
+        <span class="chip" style="background:rgba(255,107,157,0.18);border-color:rgba(255,107,157,0.35)"><svg
+            class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <rect x="2" y="7" width="20" height="14" rx="2" />
+            <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
+          </svg> Job Apply</span>
+      </div>
+      <p class="hint">Tip: Generate a post first, then tick “Also generate image” to auto-attach. Image generation is
+        separate but linkable.</p>
+      <div style="display:flex;gap:8px">
+        <span class="platform-tag">LinkedIn</span><span class="platform-tag">Instagram</span><span
+          class="platform-tag">X</span><span class="platform-tag">WhatsApp</span><span
+          class="platform-tag">Telegram</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="post"><svg class="icon" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+        </svg> Post Studio</button>
+      <button class="tab-btn" data-tab="image"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <rect x="3" y="3" width="18" height="18" rx="2" />
+          <circle cx="9" cy="9" r="2" />
+          <path d="M21 15l-5-5L5 21" />
+        </svg> Image Studio</button>
+      <button class="tab-btn" data-tab="email"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M4 4h16c1 0 2 .9 2 2v12c0 1-1 2-2 2H4c-1 0-2-.9-2-2V6c0-1 .9-2 2-2z" />
+          <polyline points="22,6 12,13 2,6" />
+        </svg> Email Studio</button>
+    </div>
+
+    <!-- POST STUDIO -->
+    <div id="panel-post" class="panel active">
+      <div class="grid2">
+        <div class="card">
+          <h3>Post Studio <small>— no matter what you want</small></h3>
+          <form id="postForm">
+            <label>What do you want to post about?</label>
+            <div class="enhancer-wrapper">
+              <textarea name="query" id="postQuery"
+                placeholder="e.g., create posts for LinkedIn and Twitter about latest AI news, or write a motivational Instagram reel caption about fitness"
+                required>create posts for LinkedIn and Twitter about latest AI news</textarea>
+              <button type="button" id="enhancePostBtn" class="enhancer-float" title="Enhance prompt with Groq">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M12 2l2.2 4.4L19 8l-4.8 1.6L12 14l-2.2-4.4L5 8l4.8-1.6z" />
+                  <path d="M19 11l.9 1.9L22 14l-2.1 1.1L19 17l-.9-1.9L16 14l2.1-1.1z" />
+                  <path d="M5 15l.9 1.9L8 18l-2.1 1.1L5 21l-.9-1.9L2 18l2.1-1.1z" />
+                </svg>
+              </button>
+            </div>
+            <span id="postEnhanceSpinner" class="hint" style="display:none">Enhancing...</span>
+            <div class="row">
+              <div>
+                <label>Platforms</label>
+                <select name="platforms" id="postPlatforms">
+                  <option value="auto">Auto (from prompt)</option>
+                  <option value="LinkedIn">LinkedIn</option>
+                  <option value="Instagram">Instagram</option>
+                  <option value="Twitter">Twitter / X</option>
+                  <option value="WhatsApp">WhatsApp</option>
+                  <option value="Facebook">Facebook</option>
+                  <option value="Telegram">Telegram</option>
+                  <option value="YouTube">YouTube Community</option>
+                  <option value="All">All 7</option>
+                </select>
+              </div>
+              <div>
+                <label>Tone</label>
+                <select name="tone" id="postTone">
+                  <option>Professional</option>
+                  <option>Viral + Emoji</option>
+                  <option>Casual</option>
+                  <option>Informative</option>
+                </select>
+              </div>
+            </div>
+            <label style="margin-top:12px"><input type="checkbox" id="attachImage" style="width:auto"> Also generate
+              image for this post (attach)</label>
+            <div style="margin-top:14px;display:flex;gap:10px">
+              <button type="submit" id="postGenerateBtn" class="btn btn-primary"><svg class="icon" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor">
+                  <path d="M12 2l2.2 4.4L19 8l-4.8 1.6L12 14l-2.2-4.4L5 8l4.8-1.6z" />
+                  <path d="M19 11l.9 1.9L22 14l-2.1 1.1L19 17l-.9-1.9L16 14l2.1-1.1z" />
+                </svg> Generate Posts</button>
+              <button type="button" id="clearPostBtn" class="btn btn-ghost">Clear</button>
+            </div>
+            <div class="spinner" id="postSpinner"><i></i> Crafting posts with 4-agent crew…</div>
+            <p class="hint">Uses: Query Interpreter → Web Search (Serper) → News Filter → Post Creator (Gemini 3.6
+              Flash)</p>
+          </form>
+        </div>
+        <div
+          style="display:flex; flex-direction:column; gap:16px; position:sticky; top:78px; align-self:start; max-height:calc(100vh - 90px); overflow-y:auto; scrollbar-width:thin;">
+          <div class="card">
+            <h3>Output <span class="badge"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <polyline points="1 12 3 12 3 20 21 20 21 12 23 12" />
+                  <polyline points="12 1 12 12" />
+                  <polyline points="7 7 12 12 17 7" />
+                </svg> Live preview</span></h3>
+            <div id="postOutput" class="output">Your posts will appear here…</div>
+            <div style="margin-top:10px;display:flex;gap:8px">
+              <button class="btn btn-ghost" id="copyPostBtn"><svg class="icon" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor">
+                  <rect x="9" y="9" width="13" height="13" rx="2" />
+                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v3.5" />
+                </svg> Copy</button>
+              <button class="btn btn-ghost" id="downloadPostBtn"><svg class="icon" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor">
+                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg> Download .txt</button>
+            </div>
+          </div>
+          <div id="postImageCard" class="card" style="display:none">
+            <h3 style="display:flex;align-items:center;gap:8px"><svg class="icon" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor">
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <circle cx="9" cy="9" r="2" />
+                <path d="M21 15l-5-5L5 21" />
+              </svg> Attached Image <span id="postImageModelBadge" class="badge"
+                style="margin-left:auto;font-size:10px"></span></h3>
+            <div id="postImages"></div>
+            <div id="postVisualPrompt" style="font-size:11px;color:var(--muted);margin-top:8px;word-break:break-word">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IMAGE STUDIO -->
+    <div id="panel-image" class="panel">
+      <div class="grid2">
+        <div class="card">
+          <h3>Image Studio <small>— separate, optional attach</small></h3>
+          <form id="imageForm">
+            <label>Image prompt</label>
+            <div class="enhancer-wrapper">
+              <textarea name="prompt" id="imagePrompt" placeholder="e.g., futuristic AI workspace, neon gradients, 4k"
+                required>A futuristic AI workspace with holographic screens, neon gradient, ultra detailed</textarea>
+              <button type="button" id="enhanceImageBtn" class="enhancer-float" title="Enhance prompt with Groq">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M12 2l2.2 4.4L19 8l-4.8 1.6L12 14l-2.2-4.4L5 8l4.8-1.6z" />
+                  <path d="M19 11l.9 1.9L22 14l-2.1 1.1L19 17l-.9-1.9L16 14l2.1-1.1z" />
+                </svg>
+              </button>
+            </div>
+            <span id="imageEnhanceSpinner" class="hint" style="display:none">Enhancing...</span>
+            <div class="row">
+              <div>
+                <label>Style</label>
+                <select name="style" id="imageStyle">
+                  <option>Photorealistic</option>
+                  <option>Illustration</option>
+                  <option>Minimal</option>
+                  <option>3D Render</option>
+                  <option>Cinematic</option>
+                </select>
+              </div>
+              <div>
+                <label>Model</label>
+                <select name="model">
+                  <option value="krea/Krea-2-Turbo">krea/Krea-2-Turbo (fal-ai)</option>
+                  <option value="stabilityai/stable-diffusion-3-medium">SD 3 Medium</option>
+                  <option value="black-forest-labs/FLUX.1-dev">FLUX.1-dev</option>
+                </select>
+              </div>
+            </div>
+            <div style="margin-top:14px">
+              <button type="submit" id="imageGenerateBtn" class="btn btn-primary"><svg class="icon" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <circle cx="9" cy="9" r="2" />
+                  <path d="M21 15l-5-5L5 21" />
+                </svg> Generate Image</button>
+            </div>
+            <div class="spinner" id="imageSpinner"><i></i> Rendering via fal-ai…</div>
+            <p class="hint">Provider: HuggingFace Inference fal-ai • HF_TOKEN • not using Gemini</p>
+          </form>
+        </div>
+        <div class="card">
+          <h3>Preview</h3>
+          <div id="imageOutput" class="output" style="text-align:center">No image yet. Generate from Post Studio or
+            here.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMAIL STUDIO -->
+    <div id="panel-email" class="panel">
+      <div class="grid2">
+        <div class="card">
+          <h3>Email Studio <small>— new agent (Email Writer)</small></h3>
+          <form id="emailForm">
+            <label>Email type </label>
+            <select name="email_type" id="emailType" onchange="toggleJobFields()">
+              <option value="Job Application">Job Application</option>
+              <option>Cold outreach</option>
+              <option>Newsletter</option>
+              <option>Follow-up</option>
+              <option>Promotion</option>
+              <option>Internal update</option>
+              <option>Hiring</option>
+              <option>Collaboration</option>
+              <option>Thank you</option>
+              <option>Apology</option>
+              <option>Invitation</option>
+            </select>
+
+            <!-- Job Application extra fields (show only when Job Application selected) -->
+            <div id="jobFields"
+              style="background:rgba(124,92,255,0.08);border:1px solid rgba(124,92,255,0.18);border-radius:12px;padding:12px;margin-top:10px">
+              <div class="row">
+                <div><label>Job Title *</label><input type="text" name="job_title" id="jobTitle"
+                    placeholder="e.g., Python Developer"></div>
+                <div><label>Company *</label><input type="text" name="company" id="companyName"
+                    placeholder="e.g., TCS, Infosys"></div>
+              </div>
+              <label>Hiring Manager (optional)</label>
+              <input type="text" name="hiring_manager" placeholder="e.g., Priya Sharma">
+              <label>Job Description (paste JD)</label>
+              <textarea name="job_description" id="jobDesc" rows="3"
+                placeholder="Paste 3-5 lines of JD - e.g., Requires Python, CrewAI, Flask, 2+ yrs"></textarea>
+              <label>Your Resume Highlights (ATS keywords)</label>
+              <textarea name="resume_highlights" id="resumeHighlights" rows="3"
+                placeholder="e.g., 3 yrs Python, Built PostCraft with CrewAI + Gemini + Flask, Intern at XYZ, B.Tech CSE"></textarea>
+              <label>Portfolio / LinkedIn Link</label>
+              <input type="text" name="portfolio"
+                placeholder="e.g., https://github.com/rounak or linkedin.com/in/rounak">
+            </div>
+
+            <div class="row">
+              <div><label>Your Name (sender) *</label><input type="text" name="sender_name" id="senderName"
+                  placeholder="e.g., Rounak Raj — will be used in sign-off, no guessing" required value="Rounak Raj">
+              </div>
+              <div><label>Recipient / Audience</label><input type="text" name="recipient"
+                  placeholder="e.g., CTOs at SaaS startups or Hiring Manager" /></div>
+            </div>
+            <label>Topic / Context</label>
+            <textarea name="context" id="emailContext"
+              placeholder="e.g., launch of PostCraft AI tool that creates posts, images and emails in one click"
+              required>Announcing PostCraft — create posts for any platform, generate images, and draft emails in one unified studio</textarea>
+            <div class="row">
+              <div>
+                <label>Tone</label>
+                <select name="tone">
+                  <option>Professional</option>
+                  <option>Friendly</option>
+                  <option>Persuasive</option>
+                  <option>Concise</option>
+                  <option>Warm & Confident (for Job Apply)</option>
+                </select>
+              </div>
+              <div>
+                <label>CrewAI Pipeline</label>
+                <input type="text" value="Groq gpt-oss-120b → HF meta-llama (Email)" disabled
+                  style="font-size:11px;color:var(--muted)">
+              </div>
+            </div>
+            <div style="margin-top:14px">
+              <button type="submit" id="emailGenerateBtn" class="btn btn-primary"><svg class="icon" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor">
+                  <path d="M4 4h16c1 0 2 .9 2 2v12c0 1-1 2-2 2H4c-1 0-2-.9-2-2V6c0-1 .9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg> Draft Email (CrewAI)</button>
+            </div>
+            <div class="spinner" id="emailSpinner"><i></i> Writing with CrewAI Email Writer Agent (Groq → HF, JSON)…
+            </div>
+          </form>
+        </div>
+        <div class="card">
+          <h3>Email Preview</h3>
+          <div id="emailOutput" class="output">Your email draft will appear here…</div>
+          <div style="margin-top:10px;display:flex;gap:8px">
+            <button class="btn btn-ghost" id="copyEmailBtn"><svg class="icon" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor">
+                <rect x="9" y="9" width="13" height="13" rx="2" />
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v3.5" />
+              </svg> Copy</button>
+            <button class="btn btn-ghost" id="downloadEmailBtn"><svg class="icon" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg> Download .txt</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">PostCraft • Built with CrewAI + Gemini 3.6 Flash + HF fal-ai/Krea • No auth • Static +
+    Templates • Made for creators</footer>
+
+  <script>
+    const tabs = document.querySelectorAll('.tab-btn'), panels = { post: document.getElementById('panel-post'), image: document.getElementById('panel-image'), email: document.getElementById('panel-email') };
+    tabs.forEach(b => b.addEventListener('click', () => {
+      tabs.forEach(x => x.classList.remove('active')); b.classList.add('active');
+      Object.values(panels).forEach(p => p.classList.remove('active')); panels[b.dataset.tab].classList.add('active');
+      history.replaceState(null, '', '#' + b.dataset.tab);
+    }));
+    function showSpinner(id, show) { document.getElementById(id).style.display = show ? 'flex' : 'none'; }
+    function setOutput(id, text) { document.getElementById(id).textContent = text; }
+    function mdToHtml(s) { return (s || '').replace(/\*\*(.*?)\*\*/g, '<strong style="color:#fff">$1</strong>').replace(/\n/g, '<br>'); }
+    // Prompt enhancer via Groq — floating, spins, locks ALL post/image controls to prevent unwanted result (fixes Clear still clickable)
+    async function enhancePrompt(kind) {
+      const isPost = kind === 'post';
+      const ta = isPost ? document.getElementById('postQuery') : document.getElementById('imagePrompt');
+      const sp = isPost ? document.getElementById('postEnhanceSpinner') : document.getElementById('imageEnhanceSpinner');
+      const floatBtn = isPost ? document.getElementById('enhancePostBtn') : document.getElementById('enhanceImageBtn');
+      const genBtn = isPost ? document.getElementById('postGenerateBtn') : document.getElementById('imageGenerateBtn');
+      const clearBtn = isPost ? document.getElementById('clearPostBtn') : null;
+      const platEl = isPost ? document.getElementById('postPlatforms') : null;
+      const toneEl = isPost ? document.getElementById('postTone') : null;
+      const chkEl = isPost ? document.getElementById('attachImage') : null;
+      const text = ta.value.trim();
+      if (!text) { alert('Enter a prompt first'); return; }
+      // lock everything that could mutate prompt during enhance
+      sp.style.display = 'inline'; floatBtn.classList.add('spinning');
+      floatBtn.disabled = true; genBtn.disabled = true; genBtn.style.opacity = '0.5';
+      if (clearBtn) { clearBtn.disabled = true; clearBtn.style.opacity = '0.5'; }
+      ta.disabled = true; if (platEl) platEl.disabled = true; if (toneEl) toneEl.disabled = true; if (chkEl) chkEl.disabled = true;
+      try {
+        const r = await fetch('/api/enhance_prompt', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, kind }) });
+        const j = await r.json();
+        if (j.error) alert('Enhance failed: ' + j.error);
+        else ta.value = j.enhanced;
+      } catch (e) { alert('Network error: ' + e.message); }
+      sp.style.display = 'none'; floatBtn.classList.remove('spinning');
+      floatBtn.disabled = false; genBtn.disabled = false; genBtn.style.opacity = '1';
+      ta.disabled = false;
+      if (clearBtn) { clearBtn.disabled = false; clearBtn.style.opacity = '1'; }
+      if (platEl) platEl.disabled = false; if (toneEl) toneEl.disabled = false; if (chkEl) chkEl.disabled = false;
+    }
+    function toggleJobFields() {
+      const t = document.getElementById('emailType').value;
+      const box = document.getElementById('jobFields');
+      const isJob = t === 'Job Application';
+      box.style.display = isJob ? 'block' : 'none';
+      document.getElementById('jobTitle').required = isJob;
+      document.getElementById('companyName').required = isJob;
+      const ctx = document.getElementById('emailContext');
+      if (isJob) { ctx.placeholder = 'Brief cover note - e.g., I am a Python developer with 3 yrs experience, passionate about AI...'; }
+      else { ctx.placeholder = 'e.g., launch of PostCraft AI tool...'; }
+    }
+    // init
+    toggleJobFields();
+    // Post - block ALL controls until done (fixes Clear still clickable + enhancer + platform respect)
+    document.getElementById('postForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('postGenerateBtn');
+      const clearBtn = document.getElementById('clearPostBtn');
+      const qEl = document.getElementById('postQuery');
+      const platEl = document.getElementById('postPlatforms');
+      const toneEl = document.getElementById('postTone');
+      const chkEl = document.getElementById('attachImage');
+      const enhBtn = document.getElementById('enhancePostBtn');
+      if (btn.disabled) return;
+      // disable all inputs including enhancer floating button
+      btn.disabled = true; clearBtn.disabled = true; qEl.disabled = true; platEl.disabled = true; toneEl.disabled = true; chkEl.disabled = true; enhBtn.disabled = true;
+      btn.style.opacity = '0.5'; clearBtn.style.opacity = '0.5'; enhBtn.style.opacity = '0.5'; const oldHtml = btn.innerHTML;
+      btn.innerHTML = '<svg class="icon" style="animation:spin 0.9s linear infinite" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12a9 9 0 11-6-8.7"/><path d="M21 3v5h-5"/></svg> Generating...';
+      const query = qEl.value;
+      const attach = chkEl.checked;
+      const platforms = platEl.value;
+      const tone = toneEl.value;
+      showSpinner('postSpinner', true); setOutput('postOutput', 'Crafting… please wait ⏳');
+      try {
+        const r = await fetch('/api/generate_post', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ query, attach, platforms, tone }) });
+        const j = await r.json();
+        if (j.error) setOutput('postOutput', 'Error: ' + j.error);
+        else {
+          // Fix ** unexpected symbols: use mdToHtml to render **bold** as <strong>, keep line breaks, no raw **
+          const postHtml = mdToHtml(j.result || '').replace(/---/g, '<hr style="border:none;border-top:1px solid var(--line);margin:12px 0">');
+          document.getElementById('postOutput').innerHTML = '<div style="font-weight:700;color:#fff;margin-bottom:8px;display:flex;align-items:center;gap:6px"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Posts</div><div style="color:#eae6ff;line-height:1.7;white-space:pre-wrap">' + postHtml + '</div>';
+          if (j.image_url) {
+            document.getElementById('postImageCard').style.display = 'block';
+            document.getElementById('postImages').innerHTML = '<img src="' + j.image_url + '" style="max-width:100%;border-radius:12px">';
+            document.getElementById('postImageModelBadge').textContent = j.image_model_used || 'fal-ai';
+            document.getElementById('postVisualPrompt').textContent = j.visual_prompt ? 'Visual prompt: ' + j.visual_prompt : '';
+            document.getElementById('imageOutput').innerHTML = '<img src="' + j.image_url + '" style="max-width:100%;border-radius:12px"><br><div style="font-size:11px;color:var(--muted);margin-top:6px">via ' + (j.image_model_used || 'fal-ai') + ' • ' + (j.visual_prompt || '') + '</div>';
+          } else if (j.image_error) {
+            document.getElementById('postImageCard').style.display = 'block';
+            document.getElementById('postImages').innerHTML = '<div style="padding:10px;background:rgba(255,193,7,0.12);border:1px solid rgba(255,193,7,0.3);border-radius:10px;font-size:12px;color:#ffda77;display:flex;gap:8px;align-items:start"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>' + j.image_error + '</span></div>';
+            document.getElementById('postImageModelBadge').textContent = 'fallback failed';
+            document.getElementById('postVisualPrompt').textContent = j.visual_prompt ? 'Tried: ' + j.visual_prompt : '';
+          } else {
+            document.getElementById('postImageCard').style.display = 'none';
+            document.getElementById('postImages').innerHTML = '';
+            document.getElementById('postVisualPrompt').textContent = '';
+            document.getElementById('postImageModelBadge').textContent = '';
+          }
+        }
+      } catch (err) { setOutput('postOutput', 'Network error: ' + err.message) }
+      showSpinner('postSpinner', false);
+      btn.disabled = false; clearBtn.disabled = false; qEl.disabled = false; platEl.disabled = false; toneEl.disabled = false; chkEl.disabled = false; enhBtn.disabled = false;
+      btn.style.opacity = '1'; clearBtn.style.opacity = '1'; enhBtn.style.opacity = '1'; btn.innerHTML = oldHtml;
+    });
+    document.getElementById('clearPostBtn').onclick = () => {
+      if (document.getElementById('postGenerateBtn').disabled) return;
+      document.getElementById('postQuery').value = '';
+    };
+    document.getElementById('copyPostBtn').onclick = () => navigator.clipboard.writeText(document.getElementById('postOutput').innerText);
+    document.getElementById('downloadPostBtn').onclick = () => {
+      const t = document.getElementById('postOutput').innerText;
+      const b = new Blob([t], { type: 'text/plain' }); const u = URL.createObjectURL(b);
+      const a = document.createElement('a'); a.href = u; a.download = 'postcraft_post.txt'; a.click(); URL.revokeObjectURL(u);
+    };
+    // Image - block until done
+    document.getElementById('imageForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('imageGenerateBtn');
+      if (btn.disabled) return;
+      btn.disabled = true; btn.style.opacity = '0.5'; const oldHtml = btn.innerHTML;
+      btn.innerHTML = '<svg class="icon" style="animation:spin 0.9s linear infinite" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12a9 9 0 11-6-8.7"/></svg> Rendering...';
+      const prompt = document.getElementById('imagePrompt').value;
+      const model = e.target.model.value;
+      showSpinner('imageSpinner', true);
+      document.getElementById('imageOutput').innerHTML = 'Rendering…';
+      try {
+        const r = await fetch('/api/generate_image', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt, model }) });
+        const j = await r.json();
+        if (j.error) document.getElementById('imageOutput').textContent = 'Error: ' + j.error;
+        else document.getElementById('imageOutput').innerHTML = '<img src="' + j.image_url + '" style="max-width:100%;border-radius:12px"><br><a href="' + j.image_url + '" download class="btn btn-ghost" style="margin-top:8px;display:inline-block">Download Image</a>';
+      } catch (err) { document.getElementById('imageOutput').textContent = 'Network error: ' + err.message }
+      showSpinner('imageSpinner', false); btn.disabled = false; btn.style.opacity = '1'; btn.innerHTML = oldHtml;
+    });
+    // Enhance buttons - floating
+    document.getElementById('enhancePostBtn').onclick = () => enhancePrompt('post');
+    document.getElementById('enhanceImageBtn').onclick = () => enhancePrompt('image');
+    // Email - block until done, spinner on button (fixes multiple clicks)
+    document.getElementById('emailForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('emailGenerateBtn');
+      if (btn.disabled) return;
+      btn.disabled = true; btn.style.opacity = '0.5'; const oldHtml = btn.innerHTML;
+      btn.innerHTML = '<svg class="icon" style="animation:spin 0.9s linear infinite" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12a9 9 0 11-6-8.7"/></svg> Drafting...';
+      const data = Object.fromEntries(new FormData(e.target).entries());
+      if (data.email_type === 'Job Application' && (!data.job_title || !data.company)) {
+        setOutput('emailOutput', 'Please fill Job Title and Company for Job Application.');
+        btn.disabled = false; btn.style.opacity = '1'; btn.innerHTML = oldHtml; return;
+      }
+      if (!data.sender_name) data.sender_name = document.getElementById('senderName').value || 'Rounak Raj';
+      showSpinner('emailSpinner', true); setOutput('emailOutput', 'Drafting via CrewAI (Groq → HF, JSON)… please wait ⏳');
+      try {
+        const r = await fetch('/api/generate_email', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+        const j = await r.json();
+        if (j.error) setOutput('emailOutput', 'Error: ' + j.error);
+        else {
+          const subjects = (j.subjects || []).map(s => mdToHtml(s));
+          const sender = data.sender_name || 'Your Name';
+          const toName = data.hiring_manager || data.company || data.recipient || 'Hiring Manager';
+          let html = '<div style="background:#1a1633;border:1px solid rgba(124,92,255,0.22);border-radius:14px;padding:14px;margin-bottom:12px">';
+          html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span style="font-weight:700;color:#fff;display:flex;align-items:center;gap:6px"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 4h16c1 0 2 .9 2 2v12c0 1-1 2-2 2H4c-1 0-2-.9-2-2V6c0-1 .9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Email Preview</span><span style="font-size:11px;color:var(--muted)">PostCraft • Groq + HF</span></div>';
+          html += '<div style="font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px;margin-top:8px"><div>From: <span style="color:#eae6ff">' + sender + '</span> &lt;' + sender.toLowerCase().replace(/ /g, '.') + '@gmail.com&gt;</div><div>To: <span style="color:#eae6ff">' + toName + '</span> @ ' + (data.company || 'Company') + '</div><div>Date: ' + new Date().toLocaleDateString() + '</div></div>';
+          html += '<div style="margin-top:10px;background:rgba(124,92,255,0.12);padding:10px;border-radius:10px;border:1px solid rgba(124,92,255,0.18)"><div style="font-weight:700;color:#fff;margin-bottom:6px;display:flex;align-items:center;gap:6px"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg> Subjects (pick one) — darker heading</div>';
+          html += subjects.map((s, i) => '<div style="display:flex;gap:8px;align-items:center;color:#eae6ff;margin:6px 0"><span style="background:#7c5cff;color:#fff;padding:2px 7px;border-radius:999px;font-size:11px">' + (i + 1) + '</span>' + s + ' <button onclick="navigator.clipboard.writeText(\'' + s.replace(/'/g, "\\'") + '\')" style="margin-left:auto;font-size:11px;padding:2px 6px;border-radius:6px;border:1px solid var(--line);background:rgba(255,255,255,0.06);color:var(--muted);cursor:pointer">Copy</button></div>').join('');
+          if (j.preheader) html += '<div style="color:var(--muted);font-size:12px;margin-top:8px;border-top:1px dashed rgba(255,255,255,0.08);padding-top:6px">Preheader: ' + mdToHtml(j.preheader) + '</div>';
+          html += '</div></div>';
+          const body = mdToHtml(j.body_html || j.body_text || j.result || '');
+          html += '<div style="background:rgba(255,255,255,0.03);padding:14px;border-radius:12px;border:1px solid var(--line)"><div style="font-weight:700;color:#fff;margin-bottom:8px;display:flex;justify-content:space-between"><span>Body</span><span style="font-size:11px;color:var(--muted)">via ' + (j.subjects && j.subjects.length ? 'Groq/HF JSON' : 'fallback') + '</span></div><div style="color:#eae6ff;line-height:1.7;background:#0f0c20;padding:12px;border-radius:10px;white-space:pre-wrap">' + body + '</div></div>';
+          if (j.cta) html += '<div style="margin-top:10px;padding:10px;background:rgba(0,217,255,0.08);border-radius:10px;border:1px solid rgba(0,217,255,0.18)"><b style="color:#7de8ff">CTA:</b> <span style="color:#eae6ff">' + mdToHtml(j.cta) + '</span></div>';
+          document.getElementById('emailOutput').innerHTML = html;
+        }
+      } catch (err) { setOutput('emailOutput', 'Network error: ' + err.message) }
+      showSpinner('emailSpinner', false); btn.disabled = false; btn.style.opacity = '1'; btn.innerHTML = oldHtml;
+    });
+    document.getElementById('copyEmailBtn').onclick = () => navigator.clipboard.writeText(document.getElementById('emailOutput').innerText);
+    document.getElementById('downloadEmailBtn').onclick = () => {
+      const t = document.getElementById('emailOutput').innerText;
+      const b = new Blob([t], { type: 'text/plain' }); const u = URL.createObjectURL(b);
+      const a = document.createElement('a'); a.href = u; a.download = 'postcraft_email.txt'; a.click(); URL.revokeObjectURL(u);
+    };
+  </script>
+</body>
+
+</html>
