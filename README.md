@@ -55,56 +55,46 @@ PostCraft uses **CrewAI** for Post & Email. Image & Enhancer are direct LLM call
 
 ### Overview — How Many Agents?
 
-- **Post Studio:** **4 Agents, 4 Tasks** — full research pipeline
-- **Email Studio:** **2 Agents (Groq) / 4 Agents (Gemini/HF)** — Job Apply + Email Writer
-- **Image Studio:** **0 Agents** — direct `fal-ai` diffusion
-- **Prompt Enhancer:** **0 Agents** — direct Groq `allam-2-7b`
+- **Post Studio:** **4 Agents, 4 Tasks** — full research pipeline (lightweight 2-agent fallback for Groq)
+- **Email Studio:** **1 Agent, 1 Task** — single Email Writer, no web search
+- **Image Studio:** **0 Agents** — direct diffusion
+- **Prompt Enhancer:** **0 Agents** — direct LLM call
 
 ### Flow (Mermaid)
 
 ```mermaid
 graph TD
     U[User Prompt] --> Q[Query Interpreter]
-    Q --> S{LLM?}
-    S -- Gemini/HF --> W[Web Search<br/>SerperDevTool<br/>5-8 facts]
-    S -- Groq --> WK[Knowledge Summary<br/>3-5 facts<br/>no tool]
+    Q --> S{LLM Fallback}
+    S -- Post: 3 LLMs --> W[Web Search<br/>5-8 facts]
+    S -- Email: 2 LLMs --> E1[Email Writer<br/>1 Agent, no search]
     W --> N[News Filter<br/>keep 5-8]
-    WK --> N
     N --> P[Post Creator<br/>platform rules]
-    N --> E[Email Writer<br/>JSON: subjects/preheader/body/cta]
-    P --> OUT[Post Output]
-    E --> EOUT[Email JSON → Preview]
-    U -.->|Post + Attach checked| V[Visual Prompt<br/>Groq: no text, 30w]
-    V --> IMG[fal-ai<br/>krea → SD3 → FLUX<br/>fallback]
+    E1 --> EOUT[Email JSON<br/>subjects/preheader/body/cta]
+    P --> OUT[Post Output<br/>filtered to Platforms dropdown]
+    U -.->|Post + Attach checked| V[Visual Prompt<br/>no text, 30w]
+    V --> IMG[fal-ai<br/>krea → SD3 → FLUX<br/>post only fallback]
     IMG --> POUT[Attached Image]
     U -. Direct .-> IMG2[Image Studio<br/>fal-ai single model]
-    U -. Direct .-> ENH[Prompt Enhancer<br/>Groq allam-2-7b<br/>40 words]
+    U -. Direct .-> ENH[Prompt Enhancer<br/>Groq direct<br/>40 words]
 ```
 
 **Post Studio (4 agents, ~30-45s):**
 ```
 User: "create LinkedIn post about AI news" + Platforms=LinkedIn + Tone=Professional
-  ↓
-[1] Query Interpreter (Gemini) → {platform:LinkedIn, topic:AI, clean_query:"AI news"}
-  ↓
-[2] Web Search (Serper/Summary) → 5-8 facts: title+source+summary
-  ↓
-[3] News Filter → filtered_news (5-8) + removed_items
-  ↓
-[4] Post Creator → LinkedIn Post 120-200w + hashtags
-  ↓ (if attach checked)
-[5] Visual Prompt (Groq) → "Futuristic AI, gradient, no text, 4k" → fal-ai fallback 3 models
+  ↓ [1] Query Interpreter → {platform:LinkedIn, topic:AI, clean_query:"AI news"}
+  ↓ [2] Web Search → 5-8 facts: title+source+summary
+  ↓ [3] News Filter → filtered_news
+  ↓ [4] Post Creator → LinkedIn Post 120-200w + hashtags
+  ↓ (if Attach checked)
+[5] Visual Prompt (no text, 30w) → fal-ai fallback krea → SD3 → FLUX (post only)
 ```
 
-**Email Studio (2 agents Groq / 4 agents Gemini):**
+**Email Studio (1 agent, no Web Search):**
 ```
-Groq (fast, no tool):
-  Query Interpreter (extracts topic) → Email Writer (3 ATS subjects + body mapping resume→JD)
-  Inputs: job_title, company, hiring_manager, JD, resume_highlights, portfolio, sender_name, tone
-  Output: {"subjects":[3], "preheader", "body_text", "body_html", "cta"}
-
-Gemini/HF (research):
-  Query Interpreter → Web Search → News Filter → Email Writer (same output)
+[1] Email Writer (single agent) → {"subjects":[3], "preheader", "body_text", "body_html", "cta"}
+Inputs: email_type, job_title, company, hiring_manager, JD, resume_highlights, portfolio, sender_name, recipient, tone
+Output: Strict JSON, use EXACT sender_name or [Your Name], mention PostCraft once
 ```
 
 **Image Studio (0 agents):**
@@ -120,9 +110,10 @@ Image: "AI workspace" → Groq → "Futuristic AI workspace, neon, 4k, no text"
 
 ### Fallback Chain
 
-- **Post:** `gemini 3.6-flash` → `groq gpt-oss-120b` → `hf meta-llama` (daily quota 20 vs OTPM 1000)
-- **Email:** `groq gpt-oss-120b` → `hf meta-llama` (Gemini removed, no max_tokens)
-- **Image (Post only):** `krea-2-Turbo` → `SD3-medium` → `FLUX.1-dev` on `402/credits`
+- **Post:** `gemini-3.6-flash` → `groq gpt-oss-120b` → `huggingface meta-llama` (all 3 LLMs)
+- **Email:** `groq gpt-oss-120b` → `huggingface meta-llama` (2 LLMs)
+- **Image (Post only):** `krea-2-Turbo` → `SD3-medium` → `FLUX.1-dev` on `402 Payment Required` (Image Studio stays single-model)
+- **Enhancer:** `groq gpt-oss-120b` direct (no Crew, `40 words` limit in prompt)
 
 ---
 
