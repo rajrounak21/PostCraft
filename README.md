@@ -124,8 +124,8 @@ Image: "AI workspace" → Groq → "Futuristic AI workspace, neon, 4k, no text"
 ## Quick Start
 
 ```bash
-git clone <your-repo-url>
-cd "AI Post Creator"
+git clone PostCraft
+cd "PostCraft"
 
 python -m venv .venv
 # Windows
@@ -188,7 +188,6 @@ All content can be copied or downloaded as `.txt`.
 ```
 AI Post Creator/
 ├── app.py              # Flask app
-├── main.py             # Streamlit version (legacy)
 ├── static/
 │   ├── css/style.css
 │   └── images/
