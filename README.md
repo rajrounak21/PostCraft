@@ -195,7 +195,7 @@ AI Post Creator/
 │   └── index.html
 ├── .env.example
 ├── README.md
-└── LICENSE
+└── requirements.txt
 ```
 
 ---
