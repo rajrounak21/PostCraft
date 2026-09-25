@@ -157,7 +157,6 @@ python app.py
 Create `.env` in the project root (see `.env.example`):
 
 ```env
-GEMINI_API_KEY=your_gemini_key
 GOOGLE_API_KEY=your_google_key
 SERPER_API_KEY=your_serper_key
 HF_TOKEN=your_huggingface_token
